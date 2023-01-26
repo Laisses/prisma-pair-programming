@@ -41,6 +41,23 @@ async function createCar(req: Request, res: Response) {
   }
 }
 
+async function updateCar(req: Request, res: Response) {
+  const carId = parseInt(req.params.carId);
+  const { model, licensePlate, year, color } = req.body;
+
+  try {
+    await carService.updateCar(carId, model, licensePlate, year, color);
+    res.sendStatus(httpStatus.OK);
+  } catch (e) {
+    console.log(e);
+    if (e.name === "ConflictError") {
+      return res.sendStatus(httpStatus.CONFLICT);
+    }
+
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
 async function deleteCar(req: Request, res: Response) {
   const carId = parseInt(req.params.carId);
 
@@ -61,6 +78,7 @@ const carController = {
   getAllCars,
   getSpecificCar,
   createCar,
+  updateCar,
   deleteCar
 }
 

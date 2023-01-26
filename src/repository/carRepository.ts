@@ -1,3 +1,4 @@
+import { type } from "os";
 import { prisma } from "../config/database.js";
 
 async function getCars() {
@@ -34,6 +35,20 @@ async function createCar(model: string, licensePlate: string, year: number, colo
   });
 }
 
+async function updateCar(id: number, model: string, licensePlate: string, year: number, color: string) {
+  await prisma.cars.update({
+    where: {
+      id: id
+    },
+    data: {
+      model,
+      licensePlate,
+      year: String(year),
+      color
+    },
+  });
+}
+
 async function deleteCar(id: number) {
   await prisma.cars.delete({
     where: {
@@ -47,6 +62,7 @@ const carRepository = {
   getCarWithLicensePlate,
   getCars,
   createCar,
+  updateCar,
   deleteCar
 }
 
